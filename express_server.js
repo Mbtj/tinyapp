@@ -12,13 +12,13 @@ const urlDatabase = {
   "9sm5xK": "http://www.google.com"
 };
 
-function generateRandomString() {
+const randomStr = function generateRandomString() {
   const characters = 'abcdefghijklmnopqrstuvwxyz0123456789';
-  const shortLink = '';
-
+  let shortLink = '';
+  const charLength = 6;
   const index = () => Math.floor(Math.random() * characters.length);
 
-  for (let i = 0; i < characters.length; i++) {
+  for (let i = 0; i < charLength; i++) {
     shortLink += characters[index()];
   }
   
@@ -26,8 +26,10 @@ function generateRandomString() {
 }
 
 app.post("/urls", (req, res) => {
-  console.log(req.body);  // Log the POST request body to the console
-  res.send("Ok");         // Respond with 'Ok' (we will replace this)
+  console.log(req.body);
+  const shorten = randomStr();
+  urlDatabase[shorten] = req.body.longURL;
+  res.redirect(`/urls/${shorten}`);
 });
 
 app.get("/", (req, res) => {
@@ -53,6 +55,10 @@ app.get("/urls", (req, res) => {
   res.render("urls_index", templateVars);
 });
 
+app.get("/u/:shortURL", (req, res) => {
+  const longURL = urlDatabase[req.params.shortURL];
+  res.redirect(longURL);
+});
 
 app.get("/hello", (req, res) => {
   res.send("<html><body>Hello <b>World</b></body></html>\n");
