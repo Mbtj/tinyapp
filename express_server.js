@@ -142,8 +142,8 @@ app.get("/login", (req, res) => {
   res.render("urls_login", templateVars);
 });
 
-app.get("/u/:shortURL", (req, res) => {
-  const longURL = urlDatabase[req.params.shortURL].longURL;
+app.get("/u/:id", (req, res) => {
+  const longURL = urlDatabase[req.params.id].longURL;
   res.redirect(longURL);
 })
 
@@ -219,7 +219,6 @@ app.post("/register", (req, res) => {
   if (emailLookup(req.body.email)) {
     res.status(400).send("Account Already Exists");
   }
-
 
   // create new user
   users[userID] = {
