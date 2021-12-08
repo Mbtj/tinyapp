@@ -14,7 +14,7 @@ const urlDatabase = {
   "9sm5xK": "http://www.google.com"
 };
 
-
+// HELPER FUNCTION
 const randomStr = function generateRandomString() {
   const characters = 'abcdefghijklmnopqrstuvwxyz0123456789';
   let shortLink = '';
@@ -29,6 +29,7 @@ const randomStr = function generateRandomString() {
 }
 
 
+// === GET REQUESTS ===
 // ROOT PAGE
 app.get("/", (req, res) => {
   res.send("Hello!");
@@ -40,6 +41,7 @@ app.get("/urls.json", (req, res) => {
   res.json(urlDatabase);
 });
 
+// PAGE FOR NEW URL
 app.get("/urls/new", (req, res) => {
   templateVars = {
     username: req.cookies["username"]
@@ -47,6 +49,7 @@ app.get("/urls/new", (req, res) => {
   res.render("urls_new", templateVars);
 });
 
+// PAGE FOR A SHORTURL INSTANCE
 app.get("/urls/:shortURL", (req, res) => {
   const templateVars = {
     shortURL: req.params.shortURL,
@@ -56,7 +59,7 @@ app.get("/urls/:shortURL", (req, res) => {
   res.render("urls_show", templateVars);
 });
 
-
+// PAGE FOR URL INDEX
 app.get("/urls", (req, res) => {
   const templateVars = {
     username: req.cookies["username"],
@@ -67,14 +70,23 @@ app.get("/urls", (req, res) => {
 });
 
 
+//
+app.get("/register", (req, res) => {
+  const templateVars = {
+    username: req.cookies["username"],
+    urls: urlDatabase
+  };
+  res.render("urls_reg",templateVars)
+});
 
+// === POST REQUESTS ===
+// POST FOR UPDATING EXISTING SHORTURL
 app.post("/urls/:id", (req, res) => {
   urlDatabase[req.params.id] = req.body.longURL;
   res.redirect(`/urls/${req.params.id}`);
 });
 
-// REQUIRES DIFFERENT USES
-// adds new tinyurl
+// POST FOR ADDING NEW SHORT LINK
 app.post("/urls", (req, res) => {
 
   console.log(req.body);
@@ -83,11 +95,14 @@ app.post("/urls", (req, res) => {
   res.redirect(`/urls/${shorten}`);
 });
 
+// POST FOR DELETING EXISTING SHORT LINK
 app.post("/urls/:shortURL/delete", (req, res) => { 
   delete urlDatabase[req.params.shortURL];
   res.redirect("/urls");
 });
 
+
+// POST FOR USER LOGIN
 app.post("/login", (req, res) => {
   const templateVars = {
     username: req.cookies["username"],
@@ -99,7 +114,7 @@ app.post("/login", (req, res) => {
   res.redirect("/urls");
 });
 
-
+// POST FOR USER LOGOUT
 app.post("/logout", (req, res) => {
   res.clearCookie("username");
   res.redirect("/urls");
