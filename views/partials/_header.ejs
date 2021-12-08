@@ -11,12 +11,13 @@
       </div>
     </div>
     
-    <div class="login">
+    
       <% if (username) { %>
-        <form class="form-inline" action="/login" method="POST">
-            <div style="text-align: right;">
-              <label for="username">Logged In as: <%= username %></label>
-              <button type="Submit" class="btn btn-outline-dark">Logout</button>
+        <h3>Logged In as: <%= username %></h3>
+        <form class="form-inline" action="/logout" method="POST">
+            <div>
+              <label for="username"></label>
+              <button type="Submit" class="btn btn-outline-dark" >Logout</button>
           </div>
         </form>
         <% } else { %>
@@ -28,7 +29,7 @@
           </form>
           <% } %>
       
-    </div>
+    
 
   </nav>
 </header>

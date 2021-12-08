@@ -17,7 +17,7 @@
       <div class="card-footer text-muted">
       <center>
       <h2>Edit</h2>
-      <form class="form-inline" action="/urls" method="POST">
+      <form class="form-new-url" action="/urls/<%= shortURL %>" method="POST">
         <div class="form-group mb-2">
           <label for="longURL">New URL:</label>
           <input class="form-control" type="text" name="longURL" placeholder="http://" style="width: 300px; margin: 1em">
