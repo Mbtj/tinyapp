@@ -8,6 +8,7 @@ const PORT = 8080; // default port 8080
 app.use(bodyParser.urlencoded({extended: true}));
 app.use(cookieParser());
 
+// enable ejs
 app.set("view engine", "ejs");
 
 
@@ -29,6 +30,7 @@ const users = {
   }
 }
 
+
 // HELPER FUNCTION
 const randomStr = function generateRandomString() {
   const characters = 'abcdefghijklmnopqrstuvwxyz0123456789';
@@ -38,7 +40,7 @@ const randomStr = function generateRandomString() {
   // function gets random index
   const index = () => Math.floor(Math.random() * characters.length);
 
-  // build 
+  // build string
   for (let i = 0; i < charLength; i++) {
     newStr += characters[index()];
   }
@@ -59,6 +61,7 @@ app.get("/urls.json", (req, res) => {
   res.json(urlDatabase);
 });
 
+
 // PAGE FOR NEW URL
 app.get("/urls/new", (req, res) => {
   templateVars = {
@@ -66,6 +69,7 @@ app.get("/urls/new", (req, res) => {
   }
   res.render("urls_new", templateVars);
 });
+
 
 // PAGE FOR A SHORTURL INSTANCE
 app.get("/urls/:shortURL", (req, res) => {
@@ -76,6 +80,7 @@ app.get("/urls/:shortURL", (req, res) => {
   };
   res.render("urls_show", templateVars);
 });
+
 
 // PAGE FOR URL INDEX
 app.get("/urls", (req, res) => {
@@ -88,7 +93,7 @@ app.get("/urls", (req, res) => {
 });
 
 
-//
+// GET REQUEST FOR REGISTER
 app.get("/register", (req, res) => {
   const templateVars = {
     username: req.cookies["username"],
@@ -97,12 +102,15 @@ app.get("/register", (req, res) => {
   res.render("urls_reg",templateVars)
 });
 
+
 // === POST REQUESTS ===
+
 // POST FOR UPDATING EXISTING SHORTURL
 app.post("/urls/:id", (req, res) => {
   urlDatabase[req.params.id] = req.body.longURL;
   res.redirect(`/urls/${req.params.id}`);
 });
+
 
 // POST FOR ADDING NEW SHORT LINK
 app.post("/urls", (req, res) => {
@@ -112,6 +120,7 @@ app.post("/urls", (req, res) => {
   urlDatabase[shorten] = req.body.longURL;
   res.redirect(`/urls/${shorten}`);
 });
+
 
 // POST FOR DELETING EXISTING SHORT LINK
 app.post("/urls/:shortURL/delete", (req, res) => { 
@@ -132,11 +141,13 @@ app.post("/login", (req, res) => {
   res.redirect("/urls");
 });
 
+
 // POST FOR USER LOGOUT
 app.post("/logout", (req, res) => {
   res.clearCookie("username");
   res.redirect("/urls");
 });
+
 
 app.post("/register", (req, res) => {
   // generate new id
@@ -151,6 +162,7 @@ app.post("/register", (req, res) => {
 
 res.redirect("/urls");
 });
+
 
 app.listen(PORT, () => {
   console.log(`Example app listening on port ${PORT}!`);
