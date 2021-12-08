@@ -22,16 +22,23 @@
         </tr>
       </thead>
       <tbody>
-        <% for (let url in urls) { %>
-          <% if (urls[url].userID === user_id) { %>
-            <tr>
-              <td><%= url %></td>
-              <td><%= urls[url].longURL %></td>
-              <td><form method="POST" action="/urls/<%= url%>/"><button type="submit" class="btn btn-outline-primary">Edit</button></form></td>
-              <td><form method="POST" action="/urls/<%= url%>/delete"><button type="submit" class="btn btn-outline-danger">Delete</button></form></td>
-            </tr>
+        <% if (user_id) { %>
+          <% for (let url in urls) { %>
+            <% if (urls[url].userID === user_id) { %>
+              <tr>
+                <td><%= url %></td>
+                <td><%= urls[url].longURL %></td>
+                <td><form method="POST" action="/urls/<%= url%>/"><button type="submit" class="btn btn-outline-primary">Edit</button></form></td>
+                <td><form method="POST" action="/urls/<%= url%>/delete"><button type="submit" class="btn btn-outline-danger">Delete</button></form></td>
+              </tr>
+              <% } %>  
             <% } %>    
-        <% } %>
+        <% } else { %>
+          <header>
+            Log in to access list of urls.
+          </header>
+        <% } %>  
+
       </tbody>
     </table>
   </main>
