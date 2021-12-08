@@ -119,6 +119,17 @@ app.get("/register", (req, res) => {
 });
 
 
+// GET REQUEST FOR LOGIN
+app.get("/login", (req, res) => {
+  const templateVars = {
+    users,
+    user_id: req.cookies["user_id"],
+    urls: urlDatabase
+  };
+
+  res.render("urls_login", templateVars);
+});
+
 // === POST REQUESTS ===
 
 // POST FOR UPDATING EXISTING SHORTURL
