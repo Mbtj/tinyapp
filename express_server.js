@@ -176,8 +176,10 @@ app.post("/urls/:id", (req, res) => {
 
   if (urlForUser(userID, urlID)) {
     urlDatabase[urlID].longURL = req.body.longURL;
+    res.redirect(`/urls/${req.params.id}`);
+  } else {
+    res.status(400).send("Illegal command.");
   }
-  res.redirect(`/urls/${req.params.id}`);
 });
 
 
@@ -199,9 +201,10 @@ app.post("/urls/:shortURL/delete", (req, res) => {
   const urlID = req.params.shortURL;
   if (urlForUser(req.cookies["user_id"], urlID)) {
     delete urlDatabase[urlID];
+    res.redirect("/urls");
+  } else {
+    res.status(400).send("Illegal command.")
   }
-
-  res.redirect("/urls");
 });
 
 
