@@ -142,6 +142,11 @@ app.get("/login", (req, res) => {
   res.render("urls_login", templateVars);
 });
 
+app.get("/u/:shortURL", (req, res) => {
+  const longURL = urlDatabase[req.params.shortURL].longURL;
+  res.redirect(longURL);
+})
+
 // === POST REQUESTS ===
 
 // POST FOR UPDATING EXISTING SHORTURL
@@ -210,9 +215,11 @@ app.post("/register", (req, res) => {
   if (!req.body.password || !req.body.email) {
     res.status(400).send("Bad Request");
   }
+
   if (emailLookup(req.body.email)) {
-    res.status(400).send("Email Already Exists");
+    res.status(400).send("Account Already Exists");
   }
+
 
   // create new user
   users[userID] = {
