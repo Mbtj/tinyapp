@@ -117,10 +117,15 @@ app.get("/urls/new", (req, res) => {
 
 // PAGE FOR A SHORTURL INSTANCE
 app.get("/urls/:shortURL", (req, res) => {
+  const shortURL = req.params.shortURL;
+  if (!urlDatabase[shortURL]) {
+    res.redirect("/urls");
+  }
+
   const templateVars = {
     users,
+    shortURL,
     user_id: req.cookies["user_id"],
-    shortURL: req.params.shortURL,
     longURL: urlDatabase[req.params.shortURL].longURL,
   };
 
