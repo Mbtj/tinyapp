@@ -32,15 +32,18 @@ const users = {
 // HELPER FUNCTION
 const randomStr = function generateRandomString() {
   const characters = 'abcdefghijklmnopqrstuvwxyz0123456789';
-  let shortLink = '';
+  let newStr = '';
   const charLength = 6;
+
+  // function gets random index
   const index = () => Math.floor(Math.random() * characters.length);
 
+  // build 
   for (let i = 0; i < charLength; i++) {
-    shortLink += characters[index()];
+    newStr += characters[index()];
   }
   
-  return shortLink;
+  return newStr;
 }
 
 
@@ -135,6 +138,19 @@ app.post("/logout", (req, res) => {
   res.redirect("/urls");
 });
 
+app.post("/register", (req, res) => {
+  // generate new id
+  const userID = randomStr();
+  // create new user
+  users[userID] = {
+    id: userID,
+    email: req.body.email,
+    password: req.body.password
+  }
+  console.log(users[userID])
+
+res.redirect("/urls");
+});
 
 app.listen(PORT, () => {
   console.log(`Example app listening on port ${PORT}!`);
