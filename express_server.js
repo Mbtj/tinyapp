@@ -13,8 +13,15 @@ app.set("view engine", "ejs");
 
 
 const urlDatabase = {
-  "b2xVn2": "http://www.lighthouselabs.ca",
-  "9sm5xK": "http://www.google.com"
+  "b2xVn2": {
+    longURL: "http://www.lighthouselabs.ca",
+    userID: "userRandomID"
+  },
+
+  "9sm5xK": {
+    longURL: "http://www.google.com",
+    userID: "user2RandomID"
+  }
 };
 
 const users = { 
@@ -95,7 +102,7 @@ app.get("/urls/:shortURL", (req, res) => {
     users,
     user_id: req.cookies["user_id"],
     shortURL: req.params.shortURL,
-    longURL:urlDatabase[req.params.shortURL],
+    longURL: urlDatabase[req.params.shortURL].longURL,
   };
   res.render("urls_show", templateVars);
 });
@@ -139,7 +146,7 @@ app.get("/login", (req, res) => {
 
 // POST FOR UPDATING EXISTING SHORTURL
 app.post("/urls/:id", (req, res) => {
-  urlDatabase[req.params.id] = req.body.longURL;
+  urlDatabase[req.params.id].longURL = req.body.longURL;
   res.redirect(`/urls/${req.params.id}`);
 });
 
@@ -149,7 +156,10 @@ app.post("/urls", (req, res) => {
 
   console.log(req.body);
   const shorten = randomStr();
-  urlDatabase[shorten] = req.body.longURL;
+  urlDatabase[shorten] ={
+    longURL: req.body.longURL,
+    userID: req.cookies("user_id");
+  };
   res.redirect(`/urls/${shorten}`);
 });
 
