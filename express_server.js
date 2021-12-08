@@ -31,7 +31,9 @@ const users = {
 }
 
 
-// HELPER FUNCTION
+// === HELPER FUNCTIONS ===
+
+// GENERATE NEW SERIES OF RANDOM CHARACTERS
 const randomStr = function generateRandomString() {
   const characters = 'abcdefghijklmnopqrstuvwxyz0123456789';
   let newStr = '';
@@ -48,6 +50,16 @@ const randomStr = function generateRandomString() {
   return newStr;
 }
 
+
+// CHECK EMAIL
+const emailLookup = function IsAlreadyExistingEmail(email) {
+  for (const userID in users) {
+    if (users[userID].email === email) {
+      return true;
+    }
+  }
+  return false;
+}
 
 // === GET REQUESTS ===
 // ROOT PAGE
@@ -103,7 +115,7 @@ app.get("/register", (req, res) => {
     user_id: req.cookies["user_id"],
     urls: urlDatabase
   };
-  res.render("urls_reg",templateVars)
+  res.render("urls_reg",templateVars);
 });
 
 
@@ -164,9 +176,15 @@ app.post("/register", (req, res) => {
     email: req.body.email,
     password: req.body.password
   }
-  console.log(users[userID])
+  console.log(users[userID]);
 
-res.redirect("/urls");
+  if (!req.body.password || !req.body.email) {
+    res.status(400).send("Bad Request");
+  }
+  if (emailLookup(req.body.email)) {
+    res.status(400).send("Email Already Exists");
+  }
+  res.redirect("/urls");
 });
 
 
