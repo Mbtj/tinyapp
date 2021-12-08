@@ -65,7 +65,8 @@ app.get("/urls.json", (req, res) => {
 // PAGE FOR NEW URL
 app.get("/urls/new", (req, res) => {
   templateVars = {
-    username: req.cookies["username"]
+    users,
+    user_id: req.cookies["user_id"],
   }
   res.render("urls_new", templateVars);
 });
@@ -74,9 +75,10 @@ app.get("/urls/new", (req, res) => {
 // PAGE FOR A SHORTURL INSTANCE
 app.get("/urls/:shortURL", (req, res) => {
   const templateVars = {
+    users,
+    user_id: req.cookies["user_id"],
     shortURL: req.params.shortURL,
     longURL:urlDatabase[req.params.shortURL],
-    username: req.cookies["username"]
   };
   res.render("urls_show", templateVars);
 });
@@ -85,7 +87,8 @@ app.get("/urls/:shortURL", (req, res) => {
 // PAGE FOR URL INDEX
 app.get("/urls", (req, res) => {
   const templateVars = {
-    username: req.cookies["username"],
+    users,
+    user_id: req.cookies["user_id"],
     urls: urlDatabase
   };
 
@@ -96,7 +99,8 @@ app.get("/urls", (req, res) => {
 // GET REQUEST FOR REGISTER
 app.get("/register", (req, res) => {
   const templateVars = {
-    username: req.cookies["username"],
+    users,
+    user_id: req.cookies["user_id"],
     urls: urlDatabase
   };
   res.render("urls_reg",templateVars)
@@ -132,11 +136,13 @@ app.post("/urls/:shortURL/delete", (req, res) => {
 // POST FOR USER LOGIN
 app.post("/login", (req, res) => {
   const templateVars = {
-    username: req.cookies["username"],
+    users,
+    user_id: req.cookies["user_id"],
     urls: urlDatabase
   };
 
-  res.cookie("username", req.body.username);
+  // change this later?
+  res.cookie("user_id", req.body.username);
   //res.render("urls_index", templateVars);
   res.redirect("/urls");
 });
