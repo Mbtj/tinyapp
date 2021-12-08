@@ -21,10 +21,15 @@
           </div>
         </form>
         <% } else { %>
-          <form class="form-inline" action="/login" method="POST" >
+          <form class="form-inline" action="/login">
             <div style="text-align: right;">
-              <input class="form-control" type="text" name="username" placeholder="Username" style="width: 300px; margin: 1em">
               <button type="Submit" class="btn btn-outline-dark">Login</button>
+            </div>
+          </form>
+
+          <form class="form-inline" action="/register">
+            <div style="text-align: right;">
+              <button type="Submit" class="btn btn-outline-dark">Register</button>
             </div>
           </form>
           <% } %>
