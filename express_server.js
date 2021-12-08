@@ -68,6 +68,25 @@ const emailLookup = function IsAlreadyExistingEmail(email) {
   return null;
 }
 
+// BOOLEAN FOR OWNERSHIP OVER URL
+const urlForUser = function urlOwnedByUser(userID, urlID) {
+  return urlDatabase[urlID].userID === userID;
+}
+
+
+// FILTER URLDATABASE FOR USER
+const urlsForUser = function urlsOwnedByUser(id) {
+  let userURLs = {};
+
+  for (const url in urlDatabase) {
+    if (urlForUser(id, url)) {
+      userURLs[url] = urlDatabase[url];
+    }
+  }
+  return userURLs;
+}
+
+
 // === GET REQUESTS ===
 // ROOT PAGE
 app.get("/", (req, res) => {
@@ -104,6 +123,7 @@ app.get("/urls/:shortURL", (req, res) => {
     shortURL: req.params.shortURL,
     longURL: urlDatabase[req.params.shortURL].longURL,
   };
+
   res.render("urls_show", templateVars);
 });
 
