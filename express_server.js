@@ -76,11 +76,16 @@ app.get("/urls.json", (req, res) => {
 
 // PAGE FOR NEW URL
 app.get("/urls/new", (req, res) => {
-  templateVars = {
+  const templateVars = {
     users,
     user_id: req.cookies["user_id"],
   }
-  res.render("urls_new", templateVars);
+
+  if (!templateVars.user_id) {
+    res.redirect("/login");
+  } else {
+    res.render("urls_new", templateVars);
+  }
 });
 
 
