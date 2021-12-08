@@ -55,10 +55,10 @@ const randomStr = function generateRandomString() {
 const emailLookup = function IsAlreadyExistingEmail(email) {
   for (const userID in users) {
     if (users[userID].email === email) {
-      return true;
+      return userID;
     }
   }
-  return false;
+  return 0;
 }
 
 // === GET REQUESTS ===
@@ -164,8 +164,12 @@ app.post("/login", (req, res) => {
     urls: urlDatabase
   };
 
+  // if (emailLookup(req.body.email)) {
+  //   if (user.)
+  // }
+
   // change this later?
-  res.cookie("user_id", req.body.username);
+  res.cookie("user_id", req.body.);
   //res.render("urls_index", templateVars);
   res.redirect("/urls");
 });
