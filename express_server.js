@@ -58,7 +58,7 @@ const emailLookup = function IsAlreadyExistingEmail(email) {
       return userID;
     }
   }
-  return 0;
+  return null;
 }
 
 // === GET REQUESTS ===
@@ -163,13 +163,19 @@ app.post("/login", (req, res) => {
     user_id: req.cookies["user_id"],
     urls: urlDatabase
   };
+  const userID = emailLookup(req.body.email);
+  console.log(userID, users);
 
-  // if (emailLookup(req.body.email)) {
-  //   if (user.)
-  // }
+  if (userID) { // check email
+    if (users[userID].password === req.body.password) { //check password
+      res.cookie("user_id", userID);
+    } else {
+      res.status(403).send("Incorrect email/password");
+    }
+  } else { // no email match
+    res.status(403).send("Incorrect email/password");
+  }
 
-  // change this later?
-  res.cookie("user_id", req.body.);
   //res.render("urls_index", templateVars);
   res.redirect("/urls");
 });
@@ -177,7 +183,7 @@ app.post("/login", (req, res) => {
 
 // POST FOR USER LOGOUT
 app.post("/logout", (req, res) => {
-  res.clearCookie("username");
+  res.clearCookie("user_id");
   res.redirect("/urls");
 });
 
@@ -185,13 +191,6 @@ app.post("/logout", (req, res) => {
 app.post("/register", (req, res) => {
   // generate new id
   const userID = randomStr();
-  // create new user
-  users[userID] = {
-    id: userID,
-    email: req.body.email,
-    password: req.body.password
-  }
-  console.log(users[userID]);
 
   if (!req.body.password || !req.body.email) {
     res.status(400).send("Bad Request");
@@ -199,6 +198,15 @@ app.post("/register", (req, res) => {
   if (emailLookup(req.body.email)) {
     res.status(400).send("Email Already Exists");
   }
+
+  // create new user
+  users[userID] = {
+    id: userID,
+    email: req.body.email,
+    password: req.body.password
+  }
+  console.log(users);
+
   res.redirect("/urls");
 });
 
