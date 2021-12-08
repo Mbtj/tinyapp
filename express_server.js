@@ -171,7 +171,12 @@ app.get("/u/:id", (req, res) => {
 
 // POST FOR UPDATING EXISTING SHORTURL
 app.post("/urls/:id", (req, res) => {
-  urlDatabase[req.params.id].longURL = req.body.longURL;
+  const urlID = req.params.id;
+  const userID = req.cookies["user_id"];
+
+  if (urlForUser(userID, urlID)) {
+    urlDatabase[urlID].longURL = req.body.longURL;
+  }
   res.redirect(`/urls/${req.params.id}`);
 });
 
@@ -191,7 +196,11 @@ app.post("/urls", (req, res) => {
 
 // POST FOR DELETING EXISTING SHORT LINK
 app.post("/urls/:shortURL/delete", (req, res) => { 
-  delete urlDatabase[req.params.shortURL];
+  const urlID = req.params.shortURL;
+  if (urlForUser(req.cookies["user_id"], urlID)) {
+    delete urlDatabase[urlID];
+  }
+
   res.redirect("/urls");
 });
 
