@@ -64,7 +64,7 @@ const randomStr = function generateRandomString() {
 
 
 // CHECK EMAIL
-const emailLookup = function IsAlreadyExistingEmail(email) {
+const getUserByEmail = function GetUserFromUserDatabaseByEmail(email) {
   for (const userID in users) {
     if (users[userID].email === email) {
       return userID;
@@ -227,12 +227,12 @@ app.post("/urls/:shortURL/delete", (req, res) => {
 app.post("/login", (req, res) => {
   const email = req.body.email;
   const password = req.body.password;
-  const userID = emailLookup(email);
+  const userID = getUserByEmail(email);
 
   console.log(userID, users);
 
   if (userID) { // check email
-    if (bcrypt.hashSync(password,users[userID].password)) { //check password
+    if (bcrypt.hashSync(password, users[userID].password)) { //check password
       req.session.user_id = userID;
     } else {
       res.status(403).send("Incorrect email/password");
@@ -264,7 +264,7 @@ app.post("/register", (req, res) => {
     res.status(400).send("Bad Request");
   }
 
-  if (emailLookup(email)) {
+  if (getUserByEmail(email)) {
     res.status(400).send("Account Already Exists");
   }
 
