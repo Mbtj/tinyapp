@@ -135,7 +135,7 @@ app.get("/u/:id", (req, res) => {
     const longURL = urlDatabase[urlID].longURL;
     res.redirect(longURL);
   } else {
-    res.status(400).send(`<h1>Link for ${urlID} does not exist. Click <a href=\"/urls\">here</a> to return to the main page.</h1>`)
+    res.status(400).send(`<h1>Link for ${urlID} does not exist. Click <a href=\"/urls\">here</a> to return to the main page.</h1>`);
   }
 });
 
@@ -157,8 +157,6 @@ app.post("/urls/:id", (req, res) => {
 
 // POST FOR ADDING NEW SHORT LINK
 app.post("/urls", (req, res) => {
-
-  console.log(req.body);
   const shorten = randomStr();
   urlDatabase[shorten] = {
     longURL: req.body.longURL,
@@ -186,10 +184,7 @@ app.post("/login", (req, res) => {
   const password = req.body.password;
   const userID = getUserByEmail(email, users);
 
-  console.log(userID, users);
-
   if (userID) { // check email
-    console.log(userID);
     if (bcrypt.compareSync(password, users[userID].password)) { //check password
       req.session.user_id = userID;
     } else {
@@ -222,7 +217,6 @@ app.post("/register", (req, res) => {
   if (!password || !email) {
     res.status(400).send("<h1>Bad Request Click <a href=\"/register\">here</a> to return to the registration page.</h1>");
   } else if (getUserByEmail(email, users)) {
-    console.l
     res.status(400).send("<h1>Account Already Exists Click <a href=\"/register\">here</a> to return to the registration page.</h1>");
   } else {
     // create new user
@@ -231,7 +225,6 @@ app.post("/register", (req, res) => {
       email,
       password: bcrypt.hashSync(password)
     };
-    console.log(users);
     
     res.redirect("/urls");
   }
