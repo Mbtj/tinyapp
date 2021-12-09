@@ -74,20 +74,20 @@ app.get("/urls/new", (req, res) => {
 
 
 // PAGE FOR A SHORTURL INSTANCE
-app.get("/urls/:shortURL", (req, res) => {
-  const shortURL = req.params.shortURL;
+app.get("/urls/:id", (req, res) => {
+  const urlID = req.params.id;
   const userID = req.session.user_id;
 
-  if (!urlDatabase[shortURL]) {
+  if (!urlDatabase[urlID]) {
     res.redirect("/urls");
-  } else if (!urlForUser(userID, shortURL, urlDatabase)) {
-    res.status(400).send(`<h1>You cannot edit this url.</h1>\n<h2>Click <a href=\"/u/${shortURL}\">here<\a> to access the designated url`);
+  } else if (!urlForUser(userID, urlID, urlDatabase)) {
+    res.status(400).send(`<h1>You cannot edit this url.</h1>\n<h2>Click <a href=\"/u/${urlID}\">here<\a> to access the designated url`);
   } else {
     const templateVars = {
       users,
-      shortURL,
+      shortURL: urlID,
       user_id: req.session.user_id,
-      longURL: urlDatabase[req.params.shortURL].longURL,
+      longURL: urlDatabase[urlID].longURL,
     };
     res.render("urls_show", templateVars);
   }
@@ -169,8 +169,8 @@ app.post("/urls", (req, res) => {
 
 
 // POST FOR DELETING EXISTING SHORT LINK
-app.post("/urls/:shortURL/delete", (req, res) => {
-  const urlID = req.params.shortURL;
+app.post("/urls/:id/delete", (req, res) => {
+  const urlID = req.params.id;
   if (urlForUser(req.session.user_id, urlID, urlDatabase)) {
     delete urlDatabase[urlID];
     res.redirect("/urls");
