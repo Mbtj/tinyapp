@@ -222,16 +222,14 @@ app.post("/urls/:shortURL/delete", (req, res) => {
 
 // POST FOR USER LOGIN
 app.post("/login", (req, res) => {
-  const templateVars = {
-    users,
-    user_id: req.cookies["user_id"],
-    urls: urlDatabase
-  };
-  const userID = emailLookup(req.body.email);
+  const email = req.body.email;
+  const password = req.body.password;
+  const userID = emailLookup(email);
+  
   console.log(userID, users);
 
   if (userID) { // check email
-    if (users[userID].password === req.body.password) { //check password
+    if (users[userID].password === bcrypt.hashSync(password)) { //check password
       res.cookie("user_id", userID);
     } else {
       res.status(403).send("Incorrect email/password");
@@ -240,7 +238,6 @@ app.post("/login", (req, res) => {
     res.status(403).send("Incorrect email/password");
   }
 
-  //res.render("urls_index", templateVars);
   res.redirect("/urls");
 });
 
@@ -252,6 +249,7 @@ app.post("/logout", (req, res) => {
 });
 
 
+// POST FOR REGISTERING NEW ACCOUNT
 app.post("/register", (req, res) => {
   // generate new id
   const id = randomStr();
