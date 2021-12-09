@@ -220,21 +220,20 @@ app.post("/register", (req, res) => {
 
   if (!password || !email) {
     res.status(400).send("<h1>Bad Request Click <a href=\"/register\">here</a> to return to the registration page.</h1>");
-  }
-
-  if (getUserByEmail(email)) {
+  } else if (getUserByEmail(email, users)) {
+    console.l
     res.status(400).send("<h1>Account Already Exists Click <a href=\"/register\">here</a> to return to the registration page.</h1>");
+  } else {
+    // create new user
+    users[id] = {
+      id,
+      email,
+      password: bcrypt.hashSync(password)
+    };
+    console.log(users);
+    
+    res.redirect("/urls");
   }
-
-  // create new user
-  users[id] = {
-    id,
-    email,
-    password: bcrypt.hashSync(password)
-  };
-  console.log(users);
-
-  res.redirect("/urls");
 });
 
 
