@@ -29,7 +29,7 @@ const urlDatabase = {
   }
 };
 
-const users = { 
+const database = { 
   "userRandomID": {
     id: "userRandomID", 
     email: "user@example.com", 
@@ -64,9 +64,9 @@ const randomStr = function generateRandomString() {
 
 
 // CHECK EMAIL
-const getUserByEmail = function GetUserFromUserDatabaseByEmail(email) {
-  for (const userID in users) {
-    if (users[userID].email === email) {
+const getUserByEmail = function GetUserFromUserDatabaseByEmail(email, database) {
+  for (const userID in database) {
+    if (database[userID].email === email) {
       return userID;
     }
   }
@@ -108,7 +108,7 @@ app.get("/urls.json", (req, res) => {
 // PAGE FOR NEW URL
 app.get("/urls/new", (req, res) => {
   const templateVars = {
-    users,
+    users: database,
     user_id: req.session.user_id,
   }
 
@@ -133,7 +133,7 @@ app.get("/urls/:shortURL", (req, res) => {
   }
 
   const templateVars = {
-    users,
+    users: database,
     shortURL,
     user_id: req.session.user_id,
     longURL: urlDatabase[req.params.shortURL].longURL,
@@ -146,7 +146,7 @@ app.get("/urls/:shortURL", (req, res) => {
 // PAGE FOR URL INDEX
 app.get("/urls", (req, res) => {
   const templateVars = {
-    users,
+    users: database,
     user_id: req.session.user_id,
     urls: urlDatabase
   };
@@ -158,7 +158,7 @@ app.get("/urls", (req, res) => {
 // GET REQUEST FOR REGISTER
 app.get("/register", (req, res) => {
   const templateVars = {
-    users,
+    users: database,
     user_id: req.session.user_id,
     urls: urlDatabase
   };
@@ -169,7 +169,7 @@ app.get("/register", (req, res) => {
 // GET REQUEST FOR LOGIN
 app.get("/login", (req, res) => {
   const templateVars = {
-    users,
+    users: database,
     user_id: req.session.user_id,
     urls: urlDatabase
   };
@@ -227,12 +227,12 @@ app.post("/urls/:shortURL/delete", (req, res) => {
 app.post("/login", (req, res) => {
   const email = req.body.email;
   const password = req.body.password;
-  const userID = getUserByEmail(email);
+  const userID = getUserByEmail(email, users);
 
-  console.log(userID, users);
+  console.log(userID, database);
 
   if (userID) { // check email
-    if (bcrypt.hashSync(password, users[userID].password)) { //check password
+    if (bcrypt.hashSync(password, database[userID].password)) { //check password
       req.session.user_id = userID;
     } else {
       res.status(403).send("Incorrect email/password");
@@ -269,12 +269,12 @@ app.post("/register", (req, res) => {
   }
 
   // create new user
-  users[id] = {
+  database[id] = {
     id,
     email,
     password: bcrypt.hashSync(password)
   }
-  console.log(users);
+  console.log(database);
 
   res.redirect("/urls");
 });
