@@ -77,22 +77,20 @@ app.get("/urls/new", (req, res) => {
 app.get("/urls/:shortURL", (req, res) => {
   const shortURL = req.params.shortURL;
   const userID = req.session.user_id;
+
   if (!urlDatabase[shortURL]) {
     res.redirect("/urls");
-  }
-
-  if (!urlForUser(userID, shortURL)) {
+  } else if (!urlForUser(userID, shortURL, urlDatabase)) {
     res.status(400).send("You cannot edit this url");
+  } else {
+    const templateVars = {
+      users,
+      shortURL,
+      user_id: req.session.user_id,
+      longURL: urlDatabase[req.params.shortURL].longURL,
+    };
+    res.render("urls_show", templateVars);
   }
-
-  const templateVars = {
-    users,
-    shortURL,
-    user_id: req.session.user_id,
-    longURL: urlDatabase[req.params.shortURL].longURL,
-  };
-
-  res.render("urls_show", templateVars);
 });
 
 
@@ -142,7 +140,7 @@ app.post("/urls/:id", (req, res) => {
   const urlID = req.params.id;
   const userID = req.session.user_id;
 
-  if (urlForUser(userID, urlID)) {
+  if (urlForUser(userID, urlID, urlDatabase)) {
     urlDatabase[urlID].longURL = req.body.longURL;
     res.redirect(`/urls/${req.params.id}`);
   } else {
@@ -167,7 +165,7 @@ app.post("/urls", (req, res) => {
 // POST FOR DELETING EXISTING SHORT LINK
 app.post("/urls/:shortURL/delete", (req, res) => { 
   const urlID = req.params.shortURL;
-  if (urlForUser(req.session.user_id, urlID)) {
+  if (urlForUser(req.session.user_id, urlID, urlDatabase)) {
     delete urlDatabase[urlID];
     res.redirect("/urls");
   } else {
