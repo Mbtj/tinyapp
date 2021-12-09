@@ -5,9 +5,9 @@ Utilizes the resources given by [Lighthouse Labs](https://lighthouselabs.ca/) fo
 
 ## Final Product
 
-!["screenshot description"](#)
+![Example URLS Page](/docs/urls-page.png)
 
-!["screenshot description"](#)
+![Login Page](/docs/login-page.png)
 
 ## Dependencies
 
