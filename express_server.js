@@ -118,8 +118,13 @@ app.get("/urls/new", (req, res) => {
 // PAGE FOR A SHORTURL INSTANCE
 app.get("/urls/:shortURL", (req, res) => {
   const shortURL = req.params.shortURL;
+  const userID = req.cookies["user_id"];
   if (!urlDatabase[shortURL]) {
     res.redirect("/urls");
+  }
+
+  if (!urlForUser(userID, shortURL)) {
+    res.status(400).send("You cannot edit this url");
   }
 
   const templateVars = {
