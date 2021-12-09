@@ -9,8 +9,10 @@ const getUserByEmail = function GetUserFromUserDatabaseByEmail(email, database) 
 }
 
 // BOOLEAN FOR OWNERSHIP OVER URL
-const urlForUser = function urlOwnedByUser(userID, urlID) {
-  return urlDatabase[urlID].userID === userID;
+const urlForUser = function urlOwnedByUser(userID, urlID, urlDatabase) {
+  return  urlDatabase && 
+    urlDatabase[urlID] &&
+    urlDatabase[urlID].userID === userID;
 }
 
 // GENERATE NEW SERIES OF RANDOM CHARACTERS
