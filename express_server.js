@@ -1,6 +1,6 @@
 const express = require("express");
 const bodyParser = require("body-parser");
-const cookieSession = require("cookie-session"); 
+const cookieSession = require("cookie-session");
 const bcrypt = require("bcryptjs");
 
 const { getUserByEmail, urlForUser, randomStr } = require("./helpers");
@@ -31,18 +31,18 @@ const urlDatabase = {
   }
 };
 
-const users = { 
+const users = {
   "userRandomID": {
-    id: "userRandomID", 
-    email: "user@example.com", 
+    id: "userRandomID",
+    email: "user@example.com",
     password: bcrypt.hashSync("purple-monkey-dinosaur")
   },
- "user2RandomID": {
-    id: "user2RandomID", 
-    email: "user2@example.com", 
+  "user2RandomID": {
+    id: "user2RandomID",
+    email: "user2@example.com",
     password: bcrypt.hashSync("dishwasher-funk")
   }
-}
+};
 
 
 // === GET REQUESTS ===
@@ -63,7 +63,7 @@ app.get("/urls/new", (req, res) => {
   const templateVars = {
     users,
     user_id: req.session.user_id,
-  }
+  };
 
   if (!templateVars.user_id) {
     res.redirect("/login");
@@ -131,7 +131,7 @@ app.get("/login", (req, res) => {
 app.get("/u/:id", (req, res) => {
   const longURL = urlDatabase[req.params.id].longURL;
   res.redirect(longURL);
-})
+});
 
 // === POST REQUESTS ===
 
@@ -154,7 +154,7 @@ app.post("/urls", (req, res) => {
 
   console.log(req.body);
   const shorten = randomStr();
-  urlDatabase[shorten] ={
+  urlDatabase[shorten] = {
     longURL: req.body.longURL,
     userID: req.session.user_id
   };
@@ -163,13 +163,13 @@ app.post("/urls", (req, res) => {
 
 
 // POST FOR DELETING EXISTING SHORT LINK
-app.post("/urls/:shortURL/delete", (req, res) => { 
+app.post("/urls/:shortURL/delete", (req, res) => {
   const urlID = req.params.shortURL;
   if (urlForUser(req.session.user_id, urlID, urlDatabase)) {
     delete urlDatabase[urlID];
     res.redirect("/urls");
   } else {
-    res.status(400).send("Illegal command.")
+    res.status(400).send("Illegal command.");
   }
 });
 
@@ -224,7 +224,7 @@ app.post("/register", (req, res) => {
     id,
     email,
     password: bcrypt.hashSync(password)
-  }
+  };
   console.log(users);
 
   res.redirect("/urls");
