@@ -81,7 +81,7 @@ app.get("/urls/:shortURL", (req, res) => {
   if (!urlDatabase[shortURL]) {
     res.redirect("/urls");
   } else if (!urlForUser(userID, shortURL, urlDatabase)) {
-    res.status(400).send("You cannot edit this url");
+    res.status(400).send(`<h1>You cannot edit this url.</h1>\n<h2>Click <a href=\"/u/${shortURL}\">here<\a> to access the designated url`);
   } else {
     const templateVars = {
       users,
