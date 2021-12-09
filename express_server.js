@@ -1,6 +1,8 @@
 const express = require("express");
 const bodyParser = require("body-parser");
 const cookieParser = require("cookie-parser");
+const bcrypt = require("bcryptjs");
+
 const app = express();
 const PORT = 8080; // default port 8080
 
@@ -252,21 +254,23 @@ app.post("/logout", (req, res) => {
 
 app.post("/register", (req, res) => {
   // generate new id
-  const userID = randomStr();
+  const id = randomStr();
+  const password = req.body.password;
+  const email = req.body.email;
 
-  if (!req.body.password || !req.body.email) {
+  if (!password || !email) {
     res.status(400).send("Bad Request");
   }
 
-  if (emailLookup(req.body.email)) {
+  if (emailLookup(email)) {
     res.status(400).send("Account Already Exists");
   }
 
   // create new user
-  users[userID] = {
-    id: userID,
-    email: req.body.email,
-    password: req.body.password
+  users[id] = {
+    id,
+    email,
+    password: bcrypt.hashSync(password)
   }
   console.log(users);
 
