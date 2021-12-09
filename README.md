@@ -5,8 +5,10 @@ Utilizes the resources given by [Lighthouse Labs](https://lighthouselabs.ca/) fo
 
 ## Final Product
 
+### Example URLS Page
 ![Example URLS Page](/docs/urls-page.png)
 
+### Example Login Page
 ![Login Page](/docs/login-page.png)
 
 ## Dependencies
