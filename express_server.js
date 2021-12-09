@@ -129,8 +129,14 @@ app.get("/login", (req, res) => {
 });
 
 app.get("/u/:id", (req, res) => {
-  const longURL = urlDatabase[req.params.id].longURL;
-  res.redirect(longURL);
+  const urlID = req.params.id;
+
+  if (urlDatabase[urlID]) {
+    const longURL = urlDatabase[urlID].longURL;
+    res.redirect(longURL);
+  } else {
+    res.status(400).send(`<h1>Link for ${urlID} does not exist. Click <a href=\"/urls\">here</a> to return to the main page.</h1>`)
+  }
 });
 
 // === POST REQUESTS ===
