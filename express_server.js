@@ -3,6 +3,8 @@ const bodyParser = require("body-parser");
 const cookieSession = require("cookie-session"); 
 const bcrypt = require("bcryptjs");
 
+const { getUserByEmail, urlForUser, randomStr } = require("./helpers");
+
 const app = express();
 const PORT = 8080; // default port 8080
 
@@ -63,20 +65,20 @@ const randomStr = function generateRandomString() {
 }
 
 
-// CHECK EMAIL
-const getUserByEmail = function GetUserFromUserDatabaseByEmail(email, database) {
-  for (const userID in database) {
-    if (database[userID].email === email) {
-      return userID;
-    }
-  }
-  return null;
-}
+// // CHECK EMAIL
+// const getUserByEmail = function GetUserFromUserDatabaseByEmail(email, database) {
+//   for (const userID in database) {
+//     if (database[userID].email === email) {
+//       return userID;
+//     }
+//   }
+//   return null;
+// }
 
-// BOOLEAN FOR OWNERSHIP OVER URL
-const urlForUser = function urlOwnedByUser(userID, urlID) {
-  return urlDatabase[urlID].userID === userID;
-}
+// // BOOLEAN FOR OWNERSHIP OVER URL
+// const urlForUser = function urlOwnedByUser(userID, urlID) {
+//   return urlDatabase[urlID].userID === userID;
+// }
 
 
 // FILTER URLDATABASE FOR USER
