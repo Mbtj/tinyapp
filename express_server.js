@@ -31,7 +31,7 @@ const urlDatabase = {
   }
 };
 
-const database = { 
+const users = { 
   "userRandomID": {
     id: "userRandomID", 
     email: "user@example.com", 
@@ -61,7 +61,7 @@ app.get("/urls.json", (req, res) => {
 // PAGE FOR NEW URL
 app.get("/urls/new", (req, res) => {
   const templateVars = {
-    users: database,
+    users,
     user_id: req.session.user_id,
   }
 
@@ -86,7 +86,7 @@ app.get("/urls/:shortURL", (req, res) => {
   }
 
   const templateVars = {
-    users: database,
+    users,
     shortURL,
     user_id: req.session.user_id,
     longURL: urlDatabase[req.params.shortURL].longURL,
@@ -99,7 +99,7 @@ app.get("/urls/:shortURL", (req, res) => {
 // PAGE FOR URL INDEX
 app.get("/urls", (req, res) => {
   const templateVars = {
-    users: database,
+    users,
     user_id: req.session.user_id,
     urls: urlDatabase
   };
@@ -111,7 +111,7 @@ app.get("/urls", (req, res) => {
 // GET REQUEST FOR REGISTER
 app.get("/register", (req, res) => {
   const templateVars = {
-    users: database,
+    users,
     user_id: req.session.user_id,
     urls: urlDatabase
   };
@@ -122,7 +122,7 @@ app.get("/register", (req, res) => {
 // GET REQUEST FOR LOGIN
 app.get("/login", (req, res) => {
   const templateVars = {
-    users: database,
+    users,
     user_id: req.session.user_id,
     urls: urlDatabase
   };
@@ -182,10 +182,10 @@ app.post("/login", (req, res) => {
   const password = req.body.password;
   const userID = getUserByEmail(email, users);
 
-  console.log(userID, database);
+  console.log(userID, users);
 
   if (userID) { // check email
-    if (bcrypt.hashSync(password, database[userID].password)) { //check password
+    if (bcrypt.hashSync(password, users[userID].password)) { //check password
       req.session.user_id = userID;
     } else {
       res.status(403).send("Incorrect email/password");
@@ -222,12 +222,12 @@ app.post("/register", (req, res) => {
   }
 
   // create new user
-  database[id] = {
+  users[id] = {
     id,
     email,
     password: bcrypt.hashSync(password)
   }
-  console.log(database);
+  console.log(users);
 
   res.redirect("/urls");
 });
