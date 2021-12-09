@@ -229,7 +229,7 @@ app.post("/login", (req, res) => {
   console.log(userID, users);
 
   if (userID) { // check email
-    if (users[userID].password === bcrypt.hashSync(password)) { //check password
+    if (bcrypt.hashSync(password,users[userID].password)) { //check password
       res.cookie("user_id", userID);
     } else {
       res.status(403).send("Incorrect email/password");
