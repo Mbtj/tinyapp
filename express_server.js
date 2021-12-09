@@ -1,14 +1,20 @@
+// Web framework
 const express = require("express");
+
+//Middleware
 const bodyParser = require("body-parser");
 const cookieSession = require("cookie-session");
+
+// Hashing method for passwords
 const bcrypt = require("bcryptjs");
 
+// Helper functions
 const { getUserByEmail, urlForUser, randomStr } = require("./helpers");
 
 const app = express();
 const PORT = 8080; // default port 8080
 
-// Middlewares
+// Use Middlewares
 app.use(bodyParser.urlencoded({extended: true}));
 app.use(cookieSession({
   name: "session",
@@ -18,7 +24,7 @@ app.use(cookieSession({
 // enable ejs
 app.set("view engine", "ejs");
 
-
+// === DATABASES ===
 const urlDatabase = {
   "b2xVn2": {
     longURL: "http://www.lighthouselabs.ca",
@@ -46,6 +52,7 @@ const users = {
 
 
 // === GET REQUESTS ===
+
 // ROOT PAGE
 app.get("/", (req, res) => {
   res.send("Hello!");
@@ -78,9 +85,9 @@ app.get("/urls/:id", (req, res) => {
   const urlID = req.params.id;
   const userID = req.session.user_id;
 
-  if (!urlDatabase[urlID]) {
+  if (!urlDatabase[urlID]) { // If link does not exist send to error page
     res.status(400).send(`<h1> the ShortURL: ${urlID} does not exist. Click <a href=\"/urls\">here</a> to return to the main page.</h1>`);
-  } else if (!urlForUser(userID, urlID, urlDatabase)) {
+  } else if (!urlForUser(userID, urlID, urlDatabase)) { // if user does not own the short URL, send to error page
     res.status(400).send(`<h1>You cannot edit this url.</h1>\n<h2>Click <a href=\"/u/${urlID}\">here<\a> to access the designated url</h1>`);
   } else {
     const templateVars = {
@@ -117,7 +124,7 @@ app.get("/register", (req, res) => {
 });
 
 
-// GET REQUEST FOR LOGIN
+// GET REQUEST FOR LOGIN PAGE
 app.get("/login", (req, res) => {
   const templateVars = {
     users,
@@ -128,10 +135,12 @@ app.get("/login", (req, res) => {
   res.render("urls_login", templateVars);
 });
 
+
+// GET REQUEST FOR /u/:id TO SEND USER TO THE DESTINATION LINK
 app.get("/u/:id", (req, res) => {
   const urlID = req.params.id;
 
-  if (urlDatabase[urlID]) {
+  if (urlDatabase[urlID]) { // Case of valid url
     const longURL = urlDatabase[urlID].longURL;
     res.redirect(longURL);
   } else {
@@ -157,7 +166,8 @@ app.post("/urls/:id", (req, res) => {
 
 // POST FOR ADDING NEW SHORT LINK
 app.post("/urls", (req, res) => {
-  const shorten = randomStr();
+  const shorten = randomStr(); // Create new url ID
+
   urlDatabase[shorten] = {
     longURL: req.body.longURL,
     userID: req.session.user_id
@@ -169,6 +179,7 @@ app.post("/urls", (req, res) => {
 // POST FOR DELETING EXISTING SHORT LINK
 app.post("/urls/:id/delete", (req, res) => {
   const urlID = req.params.id;
+
   if (urlForUser(req.session.user_id, urlID, urlDatabase)) {
     delete urlDatabase[urlID];
     res.redirect("/urls");
@@ -208,18 +219,17 @@ app.post("/logout", (req, res) => {
 
 // POST FOR REGISTERING NEW ACCOUNT
 app.post("/register", (req, res) => {
-  // generate new id
-  const id = randomStr();
+  const id = randomStr(); // Create new User ID
 
   const password = req.body.password;
   const email = req.body.email;
 
-  if (!password || !email) {
+  if (!password || !email) { // Empty email or password
     res.status(400).send("<h1>Bad Request Click <a href=\"/register\">here</a> to return to the registration page.</h1>");
   } else if (getUserByEmail(email, users)) {
     res.status(400).send("<h1>Account Already Exists Click <a href=\"/register\">here</a> to return to the registration page.</h1>");
   } else {
-    // create new user
+    // Create new User
     users[id] = {
       id,
       email,
@@ -230,7 +240,7 @@ app.post("/register", (req, res) => {
   }
 });
 
-
+// Listen
 app.listen(PORT, () => {
   console.log(`Example app listening on port ${PORT}!`);
 });
