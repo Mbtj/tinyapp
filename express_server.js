@@ -150,7 +150,7 @@ app.post("/urls/:id", (req, res) => {
     urlDatabase[urlID].longURL = req.body.longURL;
     res.redirect(`/urls/${req.params.id}`);
   } else {
-    res.status(400).send("Illegal command.");
+    res.status(400).send("<h1>Illegal command. Click <a href=\"/urls\">here</a> to return to the main page.</h1>");
   }
 });
 
@@ -175,7 +175,7 @@ app.post("/urls/:id/delete", (req, res) => {
     delete urlDatabase[urlID];
     res.redirect("/urls");
   } else {
-    res.status(400).send("Illegal command.");
+    res.status(400).send("<h1>Illegal command. Click <a href=\"/urls\">here</a> to return to the main page.</h1>");
   }
 });
 
@@ -192,10 +192,10 @@ app.post("/login", (req, res) => {
     if (bcrypt.hashSync(password, users[userID].password)) { //check password
       req.session.user_id = userID;
     } else {
-      res.status(403).send("Incorrect email/password");
+      res.status(403).send("<h1>Incorrect email/password Click <a href=\"/login\">here</a> to return to the login page.</h1>");
     }
   } else { // no email match
-    res.status(403).send("Incorrect email/password");
+    res.status(403).send("<h1>Incorrect email/password Click <a href=\"/login\">here</a> to return to the login page.</h1>");
   }
 
   res.redirect("/urls");
@@ -214,15 +214,16 @@ app.post("/logout", (req, res) => {
 app.post("/register", (req, res) => {
   // generate new id
   const id = randomStr();
+
   const password = req.body.password;
   const email = req.body.email;
 
   if (!password || !email) {
-    res.status(400).send("Bad Request");
+    res.status(400).send("<h1>Bad Request Click <a href=\"/register\">here</a> to return to the registration page.</h1>");
   }
 
   if (getUserByEmail(email)) {
-    res.status(400).send("Account Already Exists");
+    res.status(400).send("<h1>Account Already Exists Click <a href=\"/register\">here</a> to return to the registration page.</h1>");
   }
 
   // create new user
