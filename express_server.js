@@ -79,9 +79,9 @@ app.get("/urls/:id", (req, res) => {
   const userID = req.session.user_id;
 
   if (!urlDatabase[urlID]) {
-    res.redirect("/urls");
+    res.status(400).send(`<h1> the ShortURL: ${urlID} does not exist. Click <a href=\"/urls\">here</a> to return to the main page.</h1>`);
   } else if (!urlForUser(userID, urlID, urlDatabase)) {
-    res.status(400).send(`<h1>You cannot edit this url.</h1>\n<h2>Click <a href=\"/u/${urlID}\">here<\a> to access the designated url`);
+    res.status(400).send(`<h1>You cannot edit this url.</h1>\n<h2>Click <a href=\"/u/${urlID}\">here<\a> to access the designated url</h1>`);
   } else {
     const templateVars = {
       users,
@@ -189,7 +189,8 @@ app.post("/login", (req, res) => {
   console.log(userID, users);
 
   if (userID) { // check email
-    if (bcrypt.hashSync(password, users[userID].password)) { //check password
+    console.log(userID);
+    if (bcrypt.compareSync(password, users[userID].password)) { //check password
       req.session.user_id = userID;
     } else {
       res.status(403).send("<h1>Incorrect email/password Click <a href=\"/login\">here</a> to return to the login page.</h1>");
