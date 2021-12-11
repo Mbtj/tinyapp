@@ -55,7 +55,7 @@ const users = {
 
 // ROOT PAGE
 app.get("/", (req, res) => {
-  res.send("Hello!");
+  res.redirect("/urls");
 });
 
 
@@ -236,6 +236,7 @@ app.post("/register", (req, res) => {
       password: bcrypt.hashSync(password)
     };
     
+    req.session.user_id = id;
     res.redirect("/urls");
   }
 });
