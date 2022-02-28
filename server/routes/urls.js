@@ -40,6 +40,8 @@ module.exports = (db) => {
       } else {
         res.status(400).send("<h1>Illegal command. Click <a href=\"/urls\">here</a> to return to the main page.</h1>");
       }
+
+      return router;
     });
   });
 
