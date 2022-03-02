@@ -1,6 +1,6 @@
 DROP TABLE IF EXISTS users CASCADE;
 CREATE TABLE users (
   id UUID PRIMARY KEY,
-  email TEXT,
-  password TEXT
+  email TEXT NOT NULL,
+  password TEXT NOT NULL
 );
