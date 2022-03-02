@@ -1,4 +1,5 @@
-[
+{
+  "seeds": [
      {
       "id":"b2xVn2",
       "longurl": "http://www.lighthouselabs.ca",
@@ -10,4 +11,6 @@
       "longurl": "http://www.google.com",
       "user_id": "2"
     }
-  ]
+  ],
+  "query": "INSERT INTO urls (id, longurl, user_id) VLAUES ($1, $2, $3);"
+}

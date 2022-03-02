@@ -1,12 +1,14 @@
-[
-  {
-    "email": "user@example.com",
-    "password": "purple-monkey-dinosaur"
-  },
+{
+  "seeds": [
+    {
+      "email": "user@example.com",
+      "password": "purple-monkey-dinosaur"
+    },
+    {
+      "email": "user2@example.com",
+      "password": "dishwasher-funk"
+    }
+  ],
 
-  {
-    "email": "user2@example.com",
-    "password": "dishwasher-funk"
-  }
-
-]
+  "query": "INSERT INTO users (email, password) VALUES ($1, $2);"
+}
