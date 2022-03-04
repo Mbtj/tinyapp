@@ -33,7 +33,6 @@ const runSeedFiles = async () => {
   for (const fn of schemaFilenames) {
     const seedInfo = fs.readFileSync(`./db/seeds/${fn}`, "utf8");
     console.log(`\t-> Running ${chalk.green(fn)}`);
-    //TODO LEARN ABOUT ASYNC AWAIT PROPERTIES AND THEN APPLY JSON SEED FILES TO QUERIES.
     const {seeds, query} = JSON.parse(seedInfo);
     for (const seed of seeds) {
       await db.query(query, [seed.email, bcrypt.hashSync(seed.password)]);
@@ -56,3 +55,5 @@ const runResetDB = async () => {
     db.end();
   }
 };
+
+runResetDB();
