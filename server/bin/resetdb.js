@@ -38,7 +38,11 @@ const runSeedFiles = async () => {
     console.log(`\t-> Running ${chalk.green(fn)}`);
     const {seeds, query} = JSON.parse(seedInfo);
     for (const seed of seeds) {
-      await db.query(query, [seed.email, bcrypt.hashSync(seed.password)]);
+      if (seed.email) {
+        await db.query(query, [seed.email, bcrypt.hashSync(seed.password)]);
+      } else {
+        await db.query(query, [seed.id, seed.longurl, seed.user_id]);
+      }
     }
   }
 };
