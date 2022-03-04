@@ -12,5 +12,5 @@
       "user_id": "2"
     }
   ],
-  "query": "INSERT INTO urls (id, longurl, user_id) VLAUES ($1, $2, $3);"
+  "query": "INSERT INTO urls (id, longurl, user_id) VALUES ($1, $2, $3);"
 }
