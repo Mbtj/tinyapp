@@ -19,6 +19,7 @@ const runSchemaFiles = async () => {
   const schemaFilenames = fs.readdirSync('../db/schema');
 
   for (const fn of schemaFilenames) {
+    console.log(`Reading ${fn}`);
     const sql = fs.readFileSync(`../db/schema/${fn}`, "utf8");
     chalk.green(`\t-> Running ${fn}`);
     await db.query(sql);
@@ -31,6 +32,7 @@ const runSeedFiles = async () => {
   const schemaFilenames = fs.readdirSync("../db/seeds");
 
   for (const fn of schemaFilenames) {
+    console.log(`Reading ${fn}`);
     const seedInfo = fs.readFileSync(`./db/seeds/${fn}`, "utf8");
     console.log(`\t-> Running ${chalk.green(fn)}`);
     const {seeds, query} = JSON.parse(seedInfo);
