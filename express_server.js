@@ -11,6 +11,12 @@ const bcrypt = require("bcryptjs");
 // Helper functions
 const { getUserByEmail, urlForUser, randomStr } = require("./helpers");
 
+
+const dbParams = require('./server/lib/db');
+const Pool = require('pg').Pool;
+const db = new Pool(dbParams);
+db.connect();
+
 const app = express();
 const PORT = 8080; // default port 8080
 
