@@ -16,10 +16,10 @@ const db = new Pool(dbParams);
 
 const runSchemaFiles = async () => {
   chalk.cyan('-> Loading Schema Files ...');
-  const schemaFilenames = fs.readdirSync('./db/schema');
+  const schemaFilenames = fs.readdirSync('../db/schema');
 
   for (const fn of schemaFilenames) {
-    const sql = fs.readFileSync(`./db/schema/${fn}`, "utf8");
+    const sql = fs.readFileSync(`../db/schema/${fn}`, "utf8");
     chalk.green(`\t-> Running ${fn}`);
     await db.query(sql);
   }
@@ -28,7 +28,7 @@ const runSchemaFiles = async () => {
 
 const runSeedFiles = async () => {
   console.log(chalk.cyan(`-> Loading Seeds ...`));
-  const schemaFilenames = fs.readdirSync("./db/seeds");
+  const schemaFilenames = fs.readdirSync("../db/seeds");
 
   for (const fn of schemaFilenames) {
     const seedInfo = fs.readFileSync(`./db/seeds/${fn}`, "utf8");
