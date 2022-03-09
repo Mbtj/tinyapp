@@ -70,58 +70,58 @@ app.get("/", (req, res) => {
 });
 
 
-// JSON PAGE
-app.get("/urls.json", (req, res) => {
-  res.json(urlDatabase);
-});
+// // JSON PAGE
+// app.get("/urls.json", (req, res) => {
+//   res.json(urlDatabase);
+// });
 
 
-// PAGE FOR NEW URL
-app.get("/urls/new", (req, res) => {
-  const templateVars = {
-    users,
-    user_id: req.session.user_id,
-  };
+// // PAGE FOR NEW URL
+// app.get("/urls/new", (req, res) => {
+//   const templateVars = {
+//     users,
+//     user_id: req.session.user_id,
+//   };
 
-  if (!templateVars.user_id) {
-    res.redirect("/login");
-  } else {
-    res.render("urls_new", templateVars);
-  }
-});
-
-
-// PAGE FOR A SHORTURL INSTANCE
-app.get("/urls/:id", (req, res) => {
-  const urlID = req.params.id;
-  const userID = req.session.user_id;
-
-  if (!urlDatabase[urlID]) { // If link does not exist send to error page
-    res.status(400).send(`<h1> the ShortURL: ${urlID} does not exist. Click <a href=\"/urls\">here</a> to return to the main page.</h1>`);
-  } else if (!urlForUser(userID, urlID, urlDatabase)) { // if user does not own the short URL, send to error page
-    res.status(400).send(`<h1>You cannot edit this url.</h1>\n<h2>Click <a href=\"/u/${urlID}\">here<\a> to access the designated url</h1>`);
-  } else {
-    const templateVars = {
-      users,
-      shortURL: urlID,
-      user_id: req.session.user_id,
-      longURL: urlDatabase[urlID].longURL,
-    };
-    res.render("urls_show", templateVars);
-  }
-});
+//   if (!templateVars.user_id) {
+//     res.redirect("/login");
+//   } else {
+//     res.render("urls_new", templateVars);
+//   }
+// });
 
 
-// PAGE FOR URL INDEX
-app.get("/urls", (req, res) => {
-  const templateVars = {
-    users,
-    user_id: req.session.user_id,
-    urls: urlDatabase
-  };
+// // PAGE FOR A SHORTURL INSTANCE
+// app.get("/urls/:id", (req, res) => {
+//   const urlID = req.params.id;
+//   const userID = req.session.user_id;
 
-  res.render("urls_index", templateVars);
-});
+//   if (!urlDatabase[urlID]) { // If link does not exist send to error page
+//     res.status(400).send(`<h1> the ShortURL: ${urlID} does not exist. Click <a href=\"/urls\">here</a> to return to the main page.</h1>`);
+//   } else if (!urlForUser(userID, urlID, urlDatabase)) { // if user does not own the short URL, send to error page
+//     res.status(400).send(`<h1>You cannot edit this url.</h1>\n<h2>Click <a href=\"/u/${urlID}\">here<\a> to access the designated url</h1>`);
+//   } else {
+//     const templateVars = {
+//       users,
+//       shortURL: urlID,
+//       user_id: req.session.user_id,
+//       longURL: urlDatabase[urlID].longURL,
+//     };
+//     res.render("urls_show", templateVars);
+//   }
+// });
+
+
+// // PAGE FOR URL INDEX
+// app.get("/urls", (req, res) => {
+//   const templateVars = {
+//     users,
+//     user_id: req.session.user_id,
+//     urls: urlDatabase
+//   };
+
+//   res.render("urls_index", templateVars);
+// });
 
 
 // GET REQUEST FOR REGISTER
