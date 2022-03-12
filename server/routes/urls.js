@@ -1,4 +1,6 @@
 const router = require('express').Router();
+import { randomStr } from '../../helpers';
+
 
 module.exports = (db) => {
   // JSON PAGE
@@ -31,7 +33,7 @@ module.exports = (db) => {
     }
 
     // POST FOR DELETING EXISTING SHORT LINK
-    router.post("/urls/:id/delete", (req, res) => {
+    router.post("/:id/delete", (req, res) => {
       const urlID = req.params.id;
 
       if (urlForUser(req.session.user_id, urlID, urlDatabase)) {
