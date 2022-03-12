@@ -11,12 +11,19 @@ module.exports = (db) => {
   // POST FOR ADDING NEW SHORT LINK
   app.post("/", (req, res) => {
     const shorten = randomStr(); // Create new url ID
+    const queryStr = "INSERT INTO urls (id, longurl, user_id) VALUES ($1, $2, $3);";
 
-    urlDatabase[shorten] = {
-      longURL: req.body.longURL,
-      userID: req.session.user_id
-    };
-    res.redirect(`/urls/${shorten}`);
+    // urlDatabase[shorten] = {
+    //   longURL: req.body.longURL,
+    //   userID: req.session.user_id
+    // };
+    db
+      .query(queryStr,[shorten, req.body.longURL, req.session.user_id])
+      .then(() => {
+        res.redirect(`/urls/${shorten}`);
+      })
+      .catch((err) => console.log(err));
+  
   });
 
 
