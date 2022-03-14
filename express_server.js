@@ -11,19 +11,19 @@ const bcrypt = require("bcryptjs");
 // Helper functions
 const { getUserByEmail, urlForUser, randomStr } = require("./helpers");
 
-// Database
-const dbParams = require('./server/lib/db');
-const Pool = require('pg').Pool;
-const db = new Pool(dbParams);
-db.connect();
+// // Database
+// const dbParams = require('./server/lib/db');
+// const Pool = require('pg').Pool;
+// const db = new Pool(dbParams);
+// db.connect();
 
 const app = express();
 const PORT = 8080; // default port 8080
 
-// Routes
-const { urlRoutes } = require('./server/routes');
+// // Routes
+// const { urlRoutes } = require('./server/routes');
 
-app.use('/api/urls', urlRoutes(db));
+// app.use('/api/urls', urlRoutes(db));
 
 // Use Middlewares
 app.use(bodyParser.urlencoded({extended: true}));
